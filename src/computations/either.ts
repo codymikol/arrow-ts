@@ -12,11 +12,17 @@ class ComputeException<A> extends Error {
 
 }
 
+/**
+ *  Compute context provides a suite of functionality to a {@link ComputeFunction} and can be destructured
+ */
 class ComputeContext<B> {
 
     /**
+     * This will either resolve the passed in {@link Either} to the right side value, or thraw
+     * a {@link ComputeException} that will return control back to the parent {@link ComputeFunction},
+     * resolving the left path of the passed in either argument.
      *
-     * @param either
+     * @param either - an {@link Either} that must have the same signature as its parent {@link ComputeFunction}
      */
     bind<C>(either: Either<C, B>) {
         return either.fold(l => { throw new ComputeException(l) }, identity)
