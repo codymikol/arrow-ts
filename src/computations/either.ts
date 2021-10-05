@@ -5,9 +5,9 @@ class ComputeException<A> extends Error {
 
     value: A;
 
-    constructor(lArg: A) {
+    constructor(leftArg: A) {
         super("")
-        this.value = lArg;
+        this.value = leftArg;
     }
 
 }
@@ -25,7 +25,7 @@ class ComputeContext<B> {
      * @param either - an {@link Either} that must have the same signature as its parent {@link ComputeFunction}
      */
     bind<C>(either: Either<C, B>) {
-        return either.fold(l => { throw new ComputeException(l) }, identity)
+        return either.fold(leftArg => { throw new ComputeException(leftArg) }, identity)
     }
 
 }
@@ -34,7 +34,7 @@ type ComputeFunction<A, B> = { (computeContext: ComputeContext<B>): B; };
 
 class either {
 
-    static eager<A, B>(f: ComputeFunction<A, B>): () => Either<A, B> {
+    static eager<A, B>(computeFunction: ComputeFunction<A, B>): () => Either<A, B> {
 
         return function ComputeFunction() {
 
@@ -43,7 +43,7 @@ class either {
             const isComputeError = (candidate: any): candidate is ComputeException<A> => true;
 
             try {
-                return Either.Right(f(computeContext))
+                return Either.Right(computeFunction(computeContext))
             } catch (candidate) {
                 if (isComputeError(candidate)) {
                     return Either.Left(candidate.value)
