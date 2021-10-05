@@ -1,3 +1,4 @@
+import { identity } from "./Identity";
 
 abstract class Either<A, B> {
 
@@ -57,10 +58,6 @@ abstract class Either<A, B> {
 
     public static Left<C>(value: C) {
         return new Either._Left(value)
-    }
-
-    private static identity<C>(a: C): C {
-        return a
     }
 
     public fold<C>(ifLeft: (leftArg : A) => C, ifRight: (rightArg: B) => C): C {
@@ -199,7 +196,7 @@ abstract class Either<A, B> {
      * ```
      */
     public getOrElse(f: () => B) {
-        return this.fold(f, Either.identity);
+        return this.fold(f, identity);
     }
 
     /**
@@ -213,7 +210,7 @@ abstract class Either<A, B> {
      * ```
      */
     public getOrHandle(f: (leftValue: A) => B): B {
-        return this.fold(f, Either.identity)
+        return this.fold(f, identity)
     }
 
     /**
@@ -226,7 +223,7 @@ abstract class Either<A, B> {
      * ```
      */
     public orNull(): B | null {
-        return this.fold(() => null, Either.identity);
+        return this.fold(() => null, identity);
     }
 
     /**
