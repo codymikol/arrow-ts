@@ -60,6 +60,24 @@ abstract class Either<A, B> {
         return new Either._Left(value)
     }
 
+    /**
+     * Will create an {@link Either} from the result of evaluating the first parameter using the functions
+     * provided on second and third parameters. Second parameter represents function for creating
+     * an {@link Either.Left} in case of a false result of evaluation and third parameter will be used
+     * to create a {@link Either.Right} in case of a true result.
+     *
+     * @param test expression to evaluate and build an {@link Either}
+     * @param ifFalse function to create a [Either.Left] in case of false result of test
+     * @param ifTrue function to create a [Either.Right] in case of true result of test
+     *
+     * @return [Either.Right] if evaluation succeed, [Either.Left] otherwise
+     */
+    public static conditionally<C,D>(test: Boolean, ifFalse: () => C, ifTrue: () => D): Either<C, D> {
+        return test
+            ? Either.Right(ifTrue())
+            : Either.Left(ifFalse())
+    }
+
     public fold<C>(ifLeft: (leftArg : A) => C, ifRight: (rightArg: B) => C): C {
         if(this instanceof Either._Right) return ifRight(this._value)
         if(this instanceof Either._Left) return ifLeft(this._value)

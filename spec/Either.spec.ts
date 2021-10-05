@@ -710,7 +710,39 @@ describe('Either', function () {
         });
 
         describe('conditionally', function () {
-            //todo(mikol)
+
+            describe("When the evaluated condition is false", function () {
+
+                let result: Either<String, String>;
+
+                beforeEach(() => result = Either.conditionally(false, () => "Left", () => "Right"))
+
+                it("should take the Left path", function () {
+                   expect(result.isLeft()).toBe(true);
+                });
+
+                it("should contain the left value", function () {
+                   expect(result.fold(identity, () => FailureStr)).toBe("Left")
+                });
+
+            });
+
+            describe("When the evaluated condition is true", function () {
+
+                let result: Either<String, String>;
+
+                beforeEach(() => result = Either.conditionally(true, () => "Left", () => "Right"))
+
+                it("should take the Right path", function () {
+                    expect(result.isRight()).toBe(true);
+                });
+
+                it("should contain the left value", function () {
+                    expect(result.fold(() => FailureStr, identity)).toBe("Right")
+                });
+
+            });
+
         });
 
         describe('catch', function () {
