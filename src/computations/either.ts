@@ -58,4 +58,4 @@ class either {
 }
 
 
-export {either, ComputeFunction}
+export { either }
