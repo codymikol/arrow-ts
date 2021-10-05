@@ -252,6 +252,12 @@ abstract class Either<A, B> {
         return this.fold(() => null, identity);
     }
 
+    public findOrNull(predicate: (rightArg: B) => Boolean): B | null {
+        if (this instanceof Either._Right) return predicate(this._value) ? this._value : null;
+        if (this instanceof Either._Left) return null;
+        throw Either.IllegalSideException("findOrNull");
+    }
+
     /**
      * Maps an {@link Either}, erasing the right path and setting a void right type
      */

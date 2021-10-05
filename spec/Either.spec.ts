@@ -467,7 +467,39 @@ describe('Either', function () {
         });
 
         describe('findOrNull', function () {
-            //todo(mikol)
+
+            describe('When on the Left path', function () {
+
+                let leftEither: Either<Number, Number>;
+
+                beforeEach(() => leftEither = Either.Left(10))
+
+                it("should always return null on the left path", function() {
+                   expect(leftEither.findOrNull((rightArg) => rightArg > 5)).toBe(null)
+                });
+
+                it("should return ALWAYS return null on the left path!", function() {
+                    expect(leftEither.findOrNull((rightArg) => rightArg < 5)).toBe(null)
+                })
+
+            });
+
+            describe('When on the Right path', function () {
+
+                let rightEither: Either<Number, Number>;
+
+                beforeEach(() => rightEither = Either.Right(10))
+
+                it("should return the right value if it matches the given predicate", function () {
+                    expect(rightEither.findOrNull((rightArg) => rightArg > 5)).toBe(10)
+                });
+
+                it("should return null if the predicate evaluates to false", function () {
+                   expect(rightEither.findOrNull((rightArg) => rightArg < 5)).toBe(null)
+                });
+
+            });
+
         });
 
         describe('isEmpty', function () {
