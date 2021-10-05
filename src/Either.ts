@@ -78,6 +78,14 @@ abstract class Either<A, B> {
             : Either.Left(ifFalse())
     }
 
+    public static catch<B>(f:() => B): Either<any, B> {
+        try {
+            return Either.Right(f())
+        } catch (error: any) {
+           return Either.Left(error)
+        }
+    }
+
     public fold<C>(ifLeft: (leftArg : A) => C, ifRight: (rightArg: B) => C): C {
         if(this instanceof Either._Right) return ifRight(this._value)
         if(this instanceof Either._Left) return ifLeft(this._value)

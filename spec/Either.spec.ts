@@ -746,7 +746,62 @@ describe('Either', function () {
         });
 
         describe('catch', function () {
-            //todo(mikol)
+
+            describe("When the passed lambda returns the right path", function () {
+
+                const ExpectedResult = "Hey there :)"
+
+                let result : Either<any, String>;
+
+                beforeEach(() => result = Either.catch(() => ExpectedResult))
+
+                it("should return the right path", function () {
+                   expect(result.isRight()).toBe(true);
+                });
+
+                it("should return the right value", function () {
+                    expect(result.orNull()).toBe(ExpectedResult)
+                });
+
+            });
+
+            describe("When the passed lambda throws an Error", function () {
+
+                const ExpectedError = new Error("Something horrible has happened.");
+
+                let result: Either<any, String>
+
+                beforeEach(() => result = Either.catch(() => { throw ExpectedError }))
+
+                it("should return the left path", function () {
+                    expect(result.isLeft()).toBe(true);
+                });
+
+                it("should return the thrown error as the value", function () {
+                   expect(result.fold(identity, () => FailureStr)).toBe(ExpectedError)
+                });
+
+            });
+
+            describe("When the passed lambda throws something other than an error", function () {
+
+                // Yeah, you can throw whatever you want in javascript land ¯\_(ツ)_/¯ this is why the left type is `any`
+                const ExpectedError = "Something horrible has happened.";
+
+                let result: Either<any, String>
+
+                beforeEach(() => result = Either.catch(() => { throw ExpectedError }))
+
+                it("should return the left path", function () {
+                    expect(result.isLeft()).toBe(true);
+                });
+
+                it("should return the thrown error as the value", function () {
+                    expect(result.fold(identity, () => FailureStr)).toBe(ExpectedError)
+                });
+
+            });
+
         })
 
         describe('catchAndFlatten', function () {
