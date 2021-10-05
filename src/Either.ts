@@ -34,7 +34,7 @@ abstract class Either<A, B> {
 
     }
 
-    private static _Right = class<B> extends Either<any, B> {
+    protected static _Right = class<B> extends Either<any, B> {
 
         constructor(value: B) {
             super();
