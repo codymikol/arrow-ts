@@ -86,6 +86,15 @@ abstract class Either<A, B> {
         }
     }
 
+    public static catchAndFlatten<C>(f:() => Either<any, C>): Either<any, C> {
+        return this
+            .catch(f)
+            .fold((leftArg) => Either.Left(leftArg), (rightArg) => {
+                if(rightArg instanceof Either._Right) return rightArg;
+                throw Either.IllegalSideException("catchAndFlatten")
+            })
+    }
+
     public fold<C>(ifLeft: (leftArg : A) => C, ifRight: (rightArg: B) => C): C {
         if(this instanceof Either._Right) return ifRight(this._value)
         if(this instanceof Either._Left) return ifLeft(this._value)

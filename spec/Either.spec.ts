@@ -837,7 +837,52 @@ describe('Either', function () {
         })
 
         describe('catchAndFlatten', function () {
-            //todo(mikol)
+
+            describe('When on the Left path', function() {
+
+                const MockException = new Error("Uh Oh...");
+                const WrongException = new Error("Not this one!")
+
+                let result : Either<any, String>;
+
+                beforeEach(() => result = Either.catchAndFlatten(() => { throw MockException }))
+
+                it("should return an Either", function () {
+                    expect(result).toBeInstanceOf(Either);
+                });
+
+                it("should take the left path", function () {
+                   expect(result.isLeft()).toBe(true);
+                });
+
+                it("should contain the thrown MockException as its value", function () {
+                    expect(result.fold(identity, () => WrongException)).toBe(MockException)
+                });
+
+            });
+
+            describe('When on the Right path', function () {
+
+                const ExpectedStr = "Hello"
+
+                let result : Either<any, String>;
+
+                beforeEach(() => result = Either.catchAndFlatten(() => Either.Right(ExpectedStr)))
+
+                it("should return an Either", function () {
+                    expect(result).toBeInstanceOf(Either);
+                });
+
+                it("should take the right path", function () {
+                    expect(result.isRight()).toBe(true);
+                });
+
+                it("should contain the thrown MockException as its value", function () {
+                    expect(result.fold(() => FailureStr, identity)).toBe(ExpectedStr);
+                });
+
+            });
+
         });
 
         describe('lift', function () {
