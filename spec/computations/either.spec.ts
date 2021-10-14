@@ -11,16 +11,16 @@ describe('computations', function () {
 
                 const getVeggies = () => Either.Right("carrots");
                 const getMeat = () => Either.Right("beyond beef");
-                const makeSoup = (veggies: String, meats: String) => Either.Right(`A delicious soup with ${veggies} and ${meats}`)
+                const makeSoup = (veggies: string, meats: string) => Either.Right(`A delicious soup with ${veggies} and ${meats}`)
 
                 // noinspection DuplicatedCode
-                const getSoup = either.eager<Error, String>(({bind}) => {
+                const getSoup = either.eager<Error, string>(({bind}) => {
                     const veggies = bind(getVeggies())
                     const meats = bind(getMeat())
                     return bind(makeSoup(veggies, meats));
                 })
 
-                let result: Either<Error, String>;
+                let result: Either<Error, string>;
 
                 beforeEach(function () {
                     result = getSoup();
@@ -46,17 +46,17 @@ describe('computations', function () {
 
                 const getVeggies = () => Either.Right("carrots");
                 const getMeat = () => Either.Right("beyond beef");
-                // noinspection JSUnusedLocalSymbols
-                const makeSoup = (veggies: String, meats: String) => Either.Left(MockError)
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                const makeSoup = (veggies: string, meats: string) => Either.Left(MockError)
 
                 // noinspection DuplicatedCode
-                const getSoup = either.eager<Error, String>(({bind}) => {
+                const getSoup = either.eager<Error, string>(({bind}) => {
                     const veggies = bind(getVeggies())
                     const meats = bind(getMeat())
                     return bind(makeSoup(veggies, meats));
                 })
 
-                let result: Either<Error, String>;
+                let result: Either<Error, string>;
 
                 beforeEach(function () {
                     result = getSoup();

@@ -2,8 +2,8 @@ import { identity } from "./Identity";
 
 abstract class Either<A, B> {
 
-    abstract _isLeft: Boolean
-    abstract _isRight: Boolean
+    abstract _isLeft: boolean
+    abstract _isRight: boolean
 
     isLeft() {
         return this._isLeft
@@ -12,7 +12,7 @@ abstract class Either<A, B> {
         return this._isRight
     }
 
-    private static IllegalSideException(fnName: String) {
+    private static IllegalSideException(fnName: string) {
         return new Error(`IllegalEitherException failed running '${fnName}', returned an Either that was not of type 'Left' or 'Right'`)
     }
 
@@ -72,7 +72,7 @@ abstract class Either<A, B> {
      *
      * @return [Either.Right] if evaluation succeed, [Either.Left] otherwise
      */
-    public static conditionally<C,D>(test: Boolean, ifFalse: () => C, ifTrue: () => D): Either<C, D> {
+    public static conditionally<C,D>(test: boolean, ifFalse: () => C, ifTrue: () => D): Either<C, D> {
         return test
             ? Either.Right(ifTrue())
             : Either.Left(ifFalse())
@@ -261,7 +261,7 @@ abstract class Either<A, B> {
         return this.fold(() => null, identity);
     }
 
-    public findOrNull(predicate: (rightArg: B) => Boolean): B | null {
+    public findOrNull(predicate: (rightArg: B) => boolean): B | null {
         if (this instanceof Either._Right) return predicate(this._value) ? this._value : null;
         if (this instanceof Either._Left) return null;
         throw Either.IllegalSideException("findOrNull");
@@ -287,7 +287,7 @@ abstract class Either<A, B> {
      * left.exists(it => it > 10)      // Result: false
      * ```
      */
-    public exists(predicate: (rightValue: B) => Boolean): Boolean {
+    public exists(predicate: (rightValue: B) => boolean): boolean {
         if(this instanceof Either._Left) return false;
         if(this instanceof Either._Right) return predicate(this._value)
         throw Either.IllegalSideException('exists')
@@ -306,7 +306,7 @@ abstract class Either<A, B> {
      * left.exists(it => it > 10)      // Result: false
      * ```
      */
-    public all(predicate: (rightValue: B) => Boolean): Boolean {
+    public all(predicate: (rightValue: B) => boolean): boolean {
         if(this instanceof Either._Left) return true;
         if(this instanceof Either._Right) return predicate(this._value)
         throw Either.IllegalSideException('all')
@@ -321,7 +321,7 @@ abstract class Either<A, B> {
      * Right("foo").isEmpty() // Result: false
      * ```
      */
-    public isEmpty(): Boolean {
+    public isEmpty(): boolean {
        return this.isLeft();
     }
 
@@ -334,7 +334,7 @@ abstract class Either<A, B> {
      * Right("foo").isEmpty() // Result: true
      * ```
      */
-    public isNotEmpty(): Boolean {
+    public isNotEmpty(): boolean {
         return this.isRight();
     }
 

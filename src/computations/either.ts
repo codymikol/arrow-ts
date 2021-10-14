@@ -30,11 +30,11 @@ class ComputeContext<B> {
 
 }
 
-type ComputeFunction<A, B> = { (computeContext: ComputeContext<B>): B; };
+type ComputeFunction<B> = { (computeContext: ComputeContext<B>): B; };
 
 class either {
 
-    static eager<A, B>(computeFunction: ComputeFunction<A, B>): () => Either<A, B> {
+    static eager<A, B>(computeFunction: ComputeFunction<B>): () => Either<A, B> {
 
         return function ComputeFunction() {
 
