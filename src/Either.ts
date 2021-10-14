@@ -338,6 +338,16 @@ abstract class Either<A, B> {
         return this.isRight();
     }
 
+    public traverse<C>(fa: (rightArg: B) => Array<C>): Array<Either<A, C>> {
+        return this.fold(() => [], (rightArg) => fa(rightArg).map((it) => Either.Right(it)))
+    }
+
+    public traverseNullable<C>(fa: (rightArg: B) => Array<C>): Array<Either<A, C>> | null {
+        if(this instanceof Either._Left) return null;
+        if(this instanceof Either._Right) return fa(this._value).map((it) => Either.Right(it));
+        throw Either.IllegalSideException('traverseNullable')
+    }
+
 }
 
 export { Either };

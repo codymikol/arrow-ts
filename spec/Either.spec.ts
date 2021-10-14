@@ -435,7 +435,58 @@ describe('Either', function () {
         });
 
         describe('traverse', function () {
-            //todo(mikol)
+
+            describe('When on the Left path', function () {
+
+                let result: Array<Either<Error, String>>
+                const leftValue = Error("The sadness");
+
+                beforeEach(() => {
+                    result = Either.Left(leftValue).traverse((rightArg) => rightArg.split(""))
+                });
+
+                it('should return an array', function () {
+                    expect(result).toBeInstanceOf(Array)
+                })
+
+                it('should return an empty array', function () {
+                    expect(result.length).toBe(0)
+                });
+
+            })
+
+            describe('When on the right path', function () {
+
+                let result: Array<Either<Error, String>>
+                const rightValue = "foobar"
+
+                beforeEach(() => {
+                    result = Either.Right(rightValue).traverse((rightArg) => rightArg.split(""))
+                });
+
+                it('should return an array', function () {
+                    expect(result).toBeInstanceOf(Array)
+                });
+
+                it('should return an array the size of the split "foobar"', function () {
+                    expect(result.length).toBe(rightValue.length)
+                })
+
+                it('should be an array of Either on the right path', function () {
+                    result.forEach(it => expect(it).toBeInstanceOf(Either))
+                });
+
+                it('should set the right path of each Either to the split rightValue', function () {
+                    rightValue
+                        .split("")
+                        .forEach((value, index) => {
+                            let resultValueAtIndex = result[index].orNull()
+                            expect(resultValueAtIndex).toBe(value)
+                        })
+                })
+
+            })
+
         });
 
         describe('traverseOption', function () {
@@ -443,7 +494,52 @@ describe('Either', function () {
         });
 
         describe('traverseNullable', function () {
-            //todo(mikol)
+            describe('When on the Left path', function () {
+
+                let result: Array<Either<Error, String>> | null
+                const leftValue = Error("The sadness");
+
+                beforeEach(() => {
+                    result = Either.Left(leftValue).traverseNullable((rightArg) => rightArg.split(""))
+                });
+
+                it('should return null', function () {
+                    expect(result).toBe(null)
+                })
+
+            })
+
+            describe('When on the right path', function () {
+
+                let result: Array<Either<Error, String>> | null
+                const rightValue = "foobar"
+
+                beforeEach(() => {
+                    result = Either.Right(rightValue).traverseNullable((rightArg) => rightArg.split(""))
+                });
+
+                it('should return an array', function () {
+                    expect(result).toBeInstanceOf(Array)
+                });
+
+                it('should return an array the size of the split "foobar"', function () {
+                    expect(result?.length).toBe(rightValue.length)
+                })
+
+                it('should be an array of Either on the right path', function () {
+                    result?.forEach(it => expect(it).toBeInstanceOf(Either))
+                });
+
+                it('should set the right path of each Either to the split rightValue', function () {
+                    rightValue
+                        .split("")
+                        .forEach((value, index) => {
+                            let resultValueAtIndex = result?.[index].orNull()
+                            expect(resultValueAtIndex).toBe(value)
+                        })
+                })
+
+            })
         });
 
         describe('traverseValidated', function () {
