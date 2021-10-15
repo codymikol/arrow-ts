@@ -1,14 +1,14 @@
 {
-  "name": "arrow-ts",
-  "version": "1.0.0",
-  "description": "",
+  "name": "@koaty/arrow-ts",
+  "version": "0.0.1",
+  "description": "A functional companion to typescript",
   "main": "index.js",
   "scripts": {
     "test": "jasmine-ts \"./spec/**/*.spec.ts\"",
     "lint": "yarn eslint . --ext .ts --fix"
   },
   "keywords": [],
-  "author": "",
+  "author": "Cody Mikol",
   "license": "ISC",
   "devDependencies": {
     "@types/jasmine": "^3.9.1",
@@ -20,5 +20,13 @@
     "jasmine-ts": "^0.4.0",
     "ts-node": "^10.2.1",
     "typescript": "^4.4.4"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/codymikol/arrow-ts.git"
+  },
+  "bugs": {
+    "url": "https://github.com/codymikol/arrow-ts/issues"
+  },
+  "homepage": "https://github.com/codymikol/arrow-ts#readme"
 }
