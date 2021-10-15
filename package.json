@@ -1,5 +1,5 @@
 {
-  "name": "@koaty/arrow-ts",
+  "name": "arrow-ts",
   "version": "0.0.1",
   "description": "A functional companion to typescript",
   "main": "index.js",
