@@ -3,18 +3,18 @@ import {identity} from "../src/Identity";
 
 describe('Either', function () {
 
-    const FailureStr = "Failure"
+    const FailureStr = "Failure";
 
     describe('Member Functions', function () {
 
         describe('fold', function () {
 
             it("should correctly fold to the right path", () => {
-                expect(Either.Right("Hello!").fold(() => "Left", () => "Right")).toBe("Right")
+                expect(Either.Right("Hello!").fold(() => "Left", () => "Right")).toBe("Right");
             });
 
             it("should correctly fold to the left path", () => {
-                expect(Either.Left("Hello!").fold(() => "Left", () => "Right")).toBe("Left")
+                expect(Either.Left("Hello!").fold(() => "Left", () => "Right")).toBe("Left");
             });
 
         });
@@ -23,25 +23,25 @@ describe('Either', function () {
 
             describe('When on the Left path', function () {
 
-                let leftEither: Either<string, string>
+                let leftEither: Either<string, string>;
 
-                beforeEach(() => leftEither = Either.Left("Hello"))
+                beforeEach(() => leftEither = Either.Left("Hello"));
 
                 it("should return the initial value", function () {
-                    expect(leftEither.foldLeft("Cody", (i, r) => r + " " + i)).toBe("Cody")
-                })
+                    expect(leftEither.foldLeft("Cody", (i, r) => r + " " + i)).toBe("Cody");
+                });
 
             });
 
             describe('When on the Right path', function () {
 
-                let rightEither: Either<string, string>
+                let rightEither: Either<string, string>;
 
-                beforeEach(() => rightEither = Either.Right("Hello"))
+                beforeEach(() => rightEither = Either.Right("Hello"));
 
                 it("should allow you to merge the initial value with the right value", function () {
-                    expect(rightEither.foldLeft("Cody", (i, r) => r + " " + i)).toBe("Hello Cody")
-                })
+                    expect(rightEither.foldLeft("Cody", (i, r) => r + " " + i)).toBe("Hello Cody");
+                });
 
             });
 
@@ -58,12 +58,12 @@ describe('Either', function () {
                 let leftEither: Either<string, Error>;
 
                 beforeEach(() => {
-                    leftEither = Either.Left("Hello")
-                })
+                    leftEither = Either.Left("Hello");
+                });
 
                 it('Should allow you to combine the left path with an initial value', function () {
-                    expect(leftEither.bifoldLeft("Cody", (i, l) => l + ' ' + i, () => FailureStr)).toBe("Hello Cody")
-                })
+                    expect(leftEither.bifoldLeft("Cody", (i, l) => l + ' ' + i, () => FailureStr)).toBe("Hello Cody");
+                });
 
             });
 
@@ -72,12 +72,12 @@ describe('Either', function () {
                 let rightEither: Either<Error, string>;
 
                 beforeEach(() => {
-                    rightEither = Either.Right("Hello")
-                })
+                    rightEither = Either.Right("Hello");
+                });
 
                 it('Should allow you to combine the right path with an initial value', function () {
-                    expect(rightEither.bifoldLeft("Cody", () => FailureStr, (i, r) => r + ' ' + i)).toBe("Hello Cody")
-                })
+                    expect(rightEither.bifoldLeft("Cody", () => FailureStr, (i, r) => r + ' ' + i)).toBe("Hello Cody");
+                });
 
             });
 
@@ -96,8 +96,8 @@ describe('Either', function () {
 
                 beforeEach(() => {
                     result = Either.Right("Foo").map((r) => r + "Bar");
-                    internalState = result.fold(() => FailureStr, (r) => r)
-                    if (internalState === FailureStr) fail("Expected Right Path, but Left path was taken!")
+                    internalState = result.fold(() => FailureStr, (r) => r);
+                    if (internalState === FailureStr) fail("Expected Right Path, but Left path was taken!");
                 });
 
                 it("should retain the left path", function () {
@@ -105,7 +105,7 @@ describe('Either', function () {
                 });
 
                 it("should transform the left path to the result of the passed lambda", function () {
-                    expect(internalState).toBe("FooBar")
+                    expect(internalState).toBe("FooBar");
                 });
 
             });
@@ -117,8 +117,8 @@ describe('Either', function () {
 
                 beforeEach(() => {
                     result = Either.Left("Foo").map((r) => r + "Bar");
-                    internalState = result.fold((l) => l, () => FailureStr)
-                    if (internalState === FailureStr) fail("Expected Left Path, but Right path was taken!")
+                    internalState = result.fold((l) => l, () => FailureStr);
+                    if (internalState === FailureStr) fail("Expected Left Path, but Right path was taken!");
                 });
 
                 it("should retain the left path", function () {
@@ -126,10 +126,10 @@ describe('Either', function () {
                 });
 
                 it("should retain the state of the left path", function () {
-                    expect(internalState).toBe("Foo")
+                    expect(internalState).toBe("Foo");
                 });
 
-            })
+            });
 
 
         });
@@ -143,8 +143,8 @@ describe('Either', function () {
 
                 beforeEach(() => {
                     result = Either.Left("Foo").mapLeft((l) => l + "Bar");
-                    internalState = result.fold((l) => l, () => FailureStr)
-                    if (internalState === FailureStr) fail("Expected Left Path, but Right path was taken!")
+                    internalState = result.fold((l) => l, () => FailureStr);
+                    if (internalState === FailureStr) fail("Expected Left Path, but Right path was taken!");
                 });
 
                 it("should retain the left path", function () {
@@ -152,7 +152,7 @@ describe('Either', function () {
                 });
 
                 it("should transform the left path to the result of the passed lambda", function () {
-                    expect(internalState).toBe("FooBar")
+                    expect(internalState).toBe("FooBar");
                 });
 
             });
@@ -165,13 +165,13 @@ describe('Either', function () {
                     result = Either.Left("Foo")
                         .map((r) => r + "Bar")
                         .fold((r) => r, () => FailureStr);
-                })
+                });
 
                 it("should not be affected by map", function () {
                     expect(result).toBe("Foo");
                 });
 
-            })
+            });
 
         });
 
@@ -181,14 +181,14 @@ describe('Either', function () {
 
                 let result: Either<string, string>;
 
-                beforeEach(() => result = Either.Left("Hello").swap())
+                beforeEach(() => result = Either.Left("Hello").swap());
 
                 it("should switch to the Right path", function () {
-                    expect(result.isRight()).toBe(true)
+                    expect(result.isRight()).toBe(true);
                 });
 
                 it("should set the right value to the previous left value", function () {
-                    expect(result.orNull()).toBe("Hello")
+                    expect(result.orNull()).toBe("Hello");
                 });
 
             });
@@ -197,14 +197,14 @@ describe('Either', function () {
 
                 let result: Either<string, string>;
 
-                beforeEach(() => result = Either.Right("Hello").swap())
+                beforeEach(() => result = Either.Right("Hello").swap());
 
                 it("should switch to the Left path", function () {
-                    expect(result.isLeft()).toBe(true)
+                    expect(result.isLeft()).toBe(true);
                 });
 
                 it("should set the left value to the previous right value", function () {
-                    expect(result.fold(identity, () => FailureStr)).toBe("Hello")
+                    expect(result.fold(identity, () => FailureStr)).toBe("Hello");
                 });
 
             });
@@ -215,35 +215,35 @@ describe('Either', function () {
 
             describe('When  on  the Left path', function () {
 
-                let result: Either<number, number>
+                let result: Either<number, number>;
 
-                beforeEach(() => result = Either.Left("Hey").bimap(() => 1, () => 2))
+                beforeEach(() => result = Either.Left("Hey").bimap(() => 1, () => 2));
 
                 it("should return an Either", function () {
-                    expect(result).toBeInstanceOf(Either)
+                    expect(result).toBeInstanceOf(Either);
                 });
 
                 it('should have the left value of the left lambda', function () {
-                    expect(result.fold(identity, () => 100)).toBe(1)
+                    expect(result.fold(identity, () => 100)).toBe(1);
                 });
 
-            })
+            });
 
             describe('When on the  right  path', function () {
 
-                let result: Either<number, number>
+                let result: Either<number, number>;
 
-                beforeEach(() => result = Either.Right("Hey").bimap(() => 1, () => 2))
+                beforeEach(() => result = Either.Right("Hey").bimap(() => 1, () => 2));
 
                 it("should return an Either", function () {
-                    expect(result).toBeInstanceOf(Either)
+                    expect(result).toBeInstanceOf(Either);
                 });
 
                 it('should have the left value of the right lambda', function () {
                     expect(result.fold(() => 100, identity)).toBe(2);
                 });
 
-            })
+            });
 
         });
 
@@ -254,16 +254,16 @@ describe('Either', function () {
                 let rightEither: Either<Error, number>;
 
                 beforeEach(function () {
-                    rightEither = Either.Right(10)
+                    rightEither = Either.Right(10);
                 });
 
                 it('should return true when the predicate is true', function () {
 
-                    expect(rightEither.exists((it) => it < 20)).toBe(true)
+                    expect(rightEither.exists((it) => it < 20)).toBe(true);
                 });
 
                 it('should return false when the predicate is false', function () {
-                    expect(rightEither.exists((it) => it > 20)).toBe(false)
+                    expect(rightEither.exists((it) => it > 20)).toBe(false);
                 });
 
             });
@@ -273,11 +273,11 @@ describe('Either', function () {
                 let rightEither: Either<Error, number>;
 
                 beforeEach(function () {
-                    rightEither = Either.Left(new Error("Sad Man"))
+                    rightEither = Either.Left(new Error("Sad Man"));
                 });
 
                 it('should return false, disregarding the predicate', function () {
-                    expect(rightEither.exists((it) => it < 20)).toBe(false)
+                    expect(rightEither.exists((it) => it < 20)).toBe(false);
                 });
 
             });
@@ -291,16 +291,16 @@ describe('Either', function () {
                 let rightEither: Either<Error, number>;
 
                 beforeEach(function () {
-                    rightEither = Either.Right(10)
+                    rightEither = Either.Right(10);
                 });
 
                 it('should return true when the predicate is true', function () {
 
-                    expect(rightEither.all((it) => it < 20)).toBe(true)
+                    expect(rightEither.all((it) => it < 20)).toBe(true);
                 });
 
                 it('should return false when the predicate is false', function () {
-                    expect(rightEither.all((it) => it > 20)).toBe(false)
+                    expect(rightEither.all((it) => it > 20)).toBe(false);
                 });
 
             });
@@ -310,11 +310,11 @@ describe('Either', function () {
                 let rightEither: Either<Error, number>;
 
                 beforeEach(function () {
-                    rightEither = Either.Left(new Error("Sad Man"))
+                    rightEither = Either.Left(new Error("Sad Man"));
                 });
 
                 it('should return true, disregarding the predicate', function () {
-                    expect(rightEither.all((it) => it < 20)).toBe(true)
+                    expect(rightEither.all((it) => it < 20)).toBe(true);
                 });
 
             });
@@ -323,35 +323,35 @@ describe('Either', function () {
 
         describe('getOrElse', function () {
 
-            const MockDefault = "Default"
+            const MockDefault = "Default";
 
             describe('When on the right path', function () {
 
-                let result: string | null
+                let result: string | null;
                 const rightValue = "Some cool thing that gets returned!";
 
                 beforeEach(() => {
-                    result = Either.Right(rightValue).getOrElse(() => MockDefault)
+                    result = Either.Right(rightValue).getOrElse(() => MockDefault);
                 });
 
                 it('should return the right path', function () {
-                    expect(result).toBe(rightValue)
-                })
+                    expect(result).toBe(rightValue);
+                });
 
             });
 
             describe('When on the left path', function () {
 
-                let result: string
-                const leftValue = "Some cool thing that gets returned!"
+                let result: string;
+                const leftValue = "Some cool thing that gets returned!";
 
                 beforeEach(function () {
-                    result = Either.Left(leftValue).getOrElse(() => MockDefault)
+                    result = Either.Left(leftValue).getOrElse(() => MockDefault);
                 });
 
                 it('should return the default returned in the lambda', function () {
-                    expect(result).toBe(MockDefault)
-                })
+                    expect(result).toBe(MockDefault);
+                });
 
             });
 
@@ -385,41 +385,41 @@ describe('Either', function () {
                     expect(result).toBeNull();
                 });
 
-            })
+            });
 
         });
 
         describe('getOrHandle', function () {
 
-            const MockDefault = "Hello"
+            const MockDefault = "Hello";
 
             describe('When on the right path', function () {
 
-                let result: string
+                let result: string;
                 const rightValue = "Cody!";
 
                 beforeEach(() => {
-                    result = Either.Right(rightValue).getOrHandle((leftValue) => MockDefault + ' ' + leftValue)
+                    result = Either.Right(rightValue).getOrHandle((leftValue) => MockDefault + ' ' + leftValue);
                 });
 
                 it('should return the right path', function () {
-                    expect(result).toBe(rightValue)
-                })
+                    expect(result).toBe(rightValue);
+                });
 
             });
 
             describe('When on the left path', function () {
 
-                let result: string
-                const leftValue = "Cody!"
+                let result: string;
+                const leftValue = "Cody!";
 
                 beforeEach(function () {
-                    result = Either.Left(leftValue).getOrHandle((leftValue) => MockDefault + ' ' + leftValue)
+                    result = Either.Left(leftValue).getOrHandle((leftValue) => MockDefault + ' ' + leftValue);
                 });
 
                 it('should return the result of the handler lambda', function () {
-                    expect(result).toBe("Hello Cody!")
-                })
+                    expect(result).toBe("Hello Cody!");
+                });
 
             });
 
@@ -437,54 +437,54 @@ describe('Either', function () {
 
             describe('When on the Left path', function () {
 
-                let result: Array<Either<Error, string>>
+                let result: Array<Either<Error, string>>;
                 const leftValue = Error("The sadness");
 
                 beforeEach(() => {
-                    result = Either.Left(leftValue).traverse((rightArg) => rightArg.split(""))
+                    result = Either.Left(leftValue).traverse((rightArg) => rightArg.split(""));
                 });
 
                 it('should return an array', function () {
-                    expect(result).toBeInstanceOf(Array)
-                })
-
-                it('should return an empty array', function () {
-                    expect(result.length).toBe(0)
+                    expect(result).toBeInstanceOf(Array);
                 });
 
-            })
+                it('should return an empty array', function () {
+                    expect(result.length).toBe(0);
+                });
+
+            });
 
             describe('When on the right path', function () {
 
-                let result: Array<Either<Error, string>>
-                const rightValue = "foobar"
+                let result: Array<Either<Error, string>>;
+                const rightValue = "foobar";
 
                 beforeEach(() => {
-                    result = Either.Right(rightValue).traverse((rightArg) => rightArg.split(""))
+                    result = Either.Right(rightValue).traverse((rightArg) => rightArg.split(""));
                 });
 
                 it('should return an array', function () {
-                    expect(result).toBeInstanceOf(Array)
+                    expect(result).toBeInstanceOf(Array);
                 });
 
                 it('should return an array the size of the split "foobar"', function () {
-                    expect(result.length).toBe(rightValue.length)
-                })
+                    expect(result.length).toBe(rightValue.length);
+                });
 
                 it('should be an array of Either on the right path', function () {
-                    result.forEach(it => expect(it).toBeInstanceOf(Either))
+                    result.forEach(it => expect(it).toBeInstanceOf(Either));
                 });
 
                 it('should set the right path of each Either to the split rightValue', function () {
                     rightValue
                         .split("")
                         .forEach((value, index) => {
-                            const resultValueAtIndex = result[index].orNull()
-                            expect(resultValueAtIndex).toBe(value)
-                        })
-                })
+                            const resultValueAtIndex = result[index].orNull();
+                            expect(resultValueAtIndex).toBe(value);
+                        });
+                });
 
-            })
+            });
 
         });
 
@@ -495,50 +495,50 @@ describe('Either', function () {
         describe('traverseNullable', function () {
             describe('When on the Left path', function () {
 
-                let result: Array<Either<Error, string>> | null
+                let result: Array<Either<Error, string>> | null;
                 const leftValue = Error("The sadness");
 
                 beforeEach(() => {
-                    result = Either.Left(leftValue).traverseNullable((rightArg) => rightArg.split(""))
+                    result = Either.Left(leftValue).traverseNullable((rightArg) => rightArg.split(""));
                 });
 
                 it('should return null', function () {
-                    expect(result).toBe(null)
-                })
+                    expect(result).toBe(null);
+                });
 
-            })
+            });
 
             describe('When on the right path', function () {
 
-                let result: Array<Either<Error, string>> | null
-                const rightValue = "foobar"
+                let result: Array<Either<Error, string>> | null;
+                const rightValue = "foobar";
 
                 beforeEach(() => {
-                    result = Either.Right(rightValue).traverseNullable((rightArg) => rightArg.split(""))
+                    result = Either.Right(rightValue).traverseNullable((rightArg) => rightArg.split(""));
                 });
 
                 it('should return an array', function () {
-                    expect(result).toBeInstanceOf(Array)
+                    expect(result).toBeInstanceOf(Array);
                 });
 
                 it('should return an array the size of the split "foobar"', function () {
-                    expect(result?.length).toBe(rightValue.length)
-                })
+                    expect(result?.length).toBe(rightValue.length);
+                });
 
                 it('should be an array of Either on the right path', function () {
-                    result?.forEach(it => expect(it).toBeInstanceOf(Either))
+                    result?.forEach(it => expect(it).toBeInstanceOf(Either));
                 });
 
                 it('should set the right path of each Either to the split rightValue', function () {
                     rightValue
                         .split("")
                         .forEach((value, index) => {
-                            const resultValueAtIndex = result?.[index].orNull()
-                            expect(resultValueAtIndex).toBe(value)
-                        })
-                })
+                            const resultValueAtIndex = result?.[index].orNull();
+                            expect(resultValueAtIndex).toBe(value);
+                        });
+                });
 
-            })
+            });
         });
 
         describe('traverseValidated', function () {
@@ -567,15 +567,15 @@ describe('Either', function () {
 
                 let leftEither: Either<number, number>;
 
-                beforeEach(() => leftEither = Either.Left(10))
+                beforeEach(() => leftEither = Either.Left(10));
 
                 it("should always return null on the left path", function () {
-                    expect(leftEither.findOrNull((rightArg) => rightArg > 5)).toBe(null)
+                    expect(leftEither.findOrNull((rightArg) => rightArg > 5)).toBe(null);
                 });
 
                 it("should return ALWAYS return null on the left path!", function () {
-                    expect(leftEither.findOrNull((rightArg) => rightArg < 5)).toBe(null)
-                })
+                    expect(leftEither.findOrNull((rightArg) => rightArg < 5)).toBe(null);
+                });
 
             });
 
@@ -583,14 +583,14 @@ describe('Either', function () {
 
                 let rightEither: Either<number, number>;
 
-                beforeEach(() => rightEither = Either.Right(10))
+                beforeEach(() => rightEither = Either.Right(10));
 
                 it("should return the right value if it matches the given predicate", function () {
-                    expect(rightEither.findOrNull((rightArg) => rightArg > 5)).toBe(10)
+                    expect(rightEither.findOrNull((rightArg) => rightArg > 5)).toBe(10);
                 });
 
                 it("should return null if the predicate evaluates to false", function () {
-                    expect(rightEither.findOrNull((rightArg) => rightArg < 5)).toBe(null)
+                    expect(rightEither.findOrNull((rightArg) => rightArg < 5)).toBe(null);
                 });
 
             });
@@ -603,11 +603,11 @@ describe('Either', function () {
 
                 let leftEither: Either<string, string>;
 
-                beforeEach(() => leftEither = Either.Left("Leftastic"))
+                beforeEach(() => leftEither = Either.Left("Leftastic"));
 
                 it("should return true", function () {
                     expect(leftEither.isEmpty()).toBe(true);
-                })
+                });
 
             });
 
@@ -615,11 +615,11 @@ describe('Either', function () {
 
                 let rightEither: Either<string, string>;
 
-                beforeEach(() => rightEither = Either.Right("Leftastic"))
+                beforeEach(() => rightEither = Either.Right("Leftastic"));
 
                 it("should return false", function () {
                     expect(rightEither.isEmpty()).toBe(false);
-                })
+                });
 
             });
 
@@ -631,11 +631,11 @@ describe('Either', function () {
 
                 let leftEither: Either<string, string>;
 
-                beforeEach(() => leftEither = Either.Left("Leftastic"))
+                beforeEach(() => leftEither = Either.Left("Leftastic"));
 
                 it("should return false", function () {
                     expect(leftEither.isNotEmpty()).toBe(false);
-                })
+                });
 
             });
 
@@ -643,11 +643,11 @@ describe('Either', function () {
 
                 let rightEither: Either<string, string>;
 
-                beforeEach(() => rightEither = Either.Right("Leftastic"))
+                beforeEach(() => rightEither = Either.Right("Leftastic"));
 
                 it("should return true", function () {
                     expect(rightEither.isNotEmpty()).toBe(true);
-                })
+                });
 
             });
 
@@ -659,17 +659,17 @@ describe('Either', function () {
 
             beforeEach(function () {
                 modified = false;
-            })
+            });
 
             describe('When on the right path', function () {
 
-                const InitialValue = "Hello"
+                const InitialValue = "Hello";
 
                 let result: Either<Error, string>;
 
                 beforeEach(function () {
-                    result = Either.Right(InitialValue).tap(() => modified = true)
-                })
+                    result = Either.Right(InitialValue).tap(() => modified = true);
+                });
 
                 it('should flip the modified flag to true', function () {
                     expect(modified).toBe(true);
@@ -677,23 +677,23 @@ describe('Either', function () {
 
                 it("should remain on the Right path", function () {
                     expect(result.isRight()).toBe(true);
-                })
+                });
 
                 it("should retain the initial Right value", function () {
-                    expect(result.orNull()).toBe(InitialValue)
-                })
+                    expect(result.orNull()).toBe(InitialValue);
+                });
 
-            })
+            });
 
             describe('When on the left path', function () {
 
-                const InitialValue = "Hello"
+                const InitialValue = "Hello";
 
                 let result: Either<string, Error>;
 
                 beforeEach(function () {
-                    result = Either.Left(InitialValue).tap(() => modified = true)
-                })
+                    result = Either.Left(InitialValue).tap(() => modified = true);
+                });
 
                 it('should NOT flip the modified flag to true', function () {
                     expect(modified).toBe(false);
@@ -701,13 +701,13 @@ describe('Either', function () {
 
                 it("should remain on the Left path", function () {
                     expect(result.isLeft()).toBe(true);
-                })
+                });
 
                 it("should retain the initial Left value", function () {
-                    expect(result.fold(identity, () => FailureStr)).toBe(InitialValue)
-                })
+                    expect(result.fold(identity, () => FailureStr)).toBe(InitialValue);
+                });
 
-            })
+            });
 
         });
 
@@ -721,13 +721,13 @@ describe('Either', function () {
 
             describe('When on the right path', function () {
 
-                const InitialValue = "Hello"
+                const InitialValue = "Hello";
 
                 let result: Either<Error, string>;
 
                 beforeEach(function () {
-                    result = Either.Right(InitialValue).tapLeft(() => modified = true)
-                })
+                    result = Either.Right(InitialValue).tapLeft(() => modified = true);
+                });
 
                 it('should NOT flip the modified flag to true', function () {
                     expect(modified).toBe(false);
@@ -735,23 +735,23 @@ describe('Either', function () {
 
                 it("should remain on the Right path", function () {
                     expect(result.isRight()).toBe(true);
-                })
+                });
 
                 it("should retain the initial Right value", function () {
-                    expect(result.orNull()).toBe(InitialValue)
-                })
+                    expect(result.orNull()).toBe(InitialValue);
+                });
 
-            })
+            });
 
             describe('When on the left path', function () {
 
-                const InitialValue = "Hello"
+                const InitialValue = "Hello";
 
                 let result: Either<string, Error>;
 
                 beforeEach(function () {
-                    result = Either.Left(InitialValue).tapLeft(() => modified = true)
-                })
+                    result = Either.Left(InitialValue).tapLeft(() => modified = true);
+                });
 
                 it('should flip the modified flag to true', function () {
                     expect(modified).toBe(true);
@@ -759,19 +759,19 @@ describe('Either', function () {
 
                 it("should remain on the Left path", function () {
                     expect(result.isLeft()).toBe(true);
-                })
+                });
 
                 it("should retain the initial Left value", function () {
-                    expect(result.fold(identity, () => FailureStr)).toBe(InitialValue)
-                })
+                    expect(result.fold(identity, () => FailureStr)).toBe(InitialValue);
+                });
 
-            })
+            });
 
         });
 
         describe('toValidatedNel', function () {
             //todo(mikol) requires an Validated<A, B> implementation...
-        })
+        });
 
         describe('toValidated', function () {
             //todo(mikol) requires an Validated<A, B> implementation...
@@ -782,9 +782,9 @@ describe('Either', function () {
             let result: Either<Error, string>, voidedResult: Either<Error, void>;
 
             beforeEach(function () {
-                result = Either.Right("Foo")
+                result = Either.Right("Foo");
                 voidedResult = result.void();
-            })
+            });
 
             it('should remain on the right path', function () {
                 expect(voidedResult.isRight()).toBe(true);
@@ -802,25 +802,25 @@ describe('Either', function () {
 
         describe('Left', function () {
 
-            const left = Either.Left("test")
+            const left = Either.Left("test");
 
             it("should be marked as left", function () {
-                expect(left.isLeft()).toBe(true)
-            })
+                expect(left.isLeft()).toBe(true);
+            });
 
             it("should not be marked as right", function () {
-                expect(left.isRight()).toBe(false)
-            })
+                expect(left.isRight()).toBe(false);
+            });
 
             it("should correctly parse to a string", function () {
-                expect(left.toString()).toBe("Either.Left(string)")
-            })
+                expect(left.toString()).toBe("Either.Left(string)");
+            });
 
         });
 
         describe('Right', function () {
 
-            const right = Either.Right("test")
+            const right = Either.Right("test");
 
             it("should not be marked as left", function () {
                 expect(right.isRight()).toBe(true);
@@ -831,8 +831,8 @@ describe('Either', function () {
             });
 
             it("should correctly parse to a string", function () {
-                expect(right.toString()).toBe("Either.Right(string)")
-            })
+                expect(right.toString()).toBe("Either.Right(string)");
+            });
 
         });
 
@@ -842,14 +842,14 @@ describe('Either', function () {
 
                 let result: Either<string, string>;
 
-                beforeEach(() => result = Either.conditionally(false, () => "Left", () => "Right"))
+                beforeEach(() => result = Either.conditionally(false, () => "Left", () => "Right"));
 
                 it("should take the Left path", function () {
                     expect(result.isLeft()).toBe(true);
                 });
 
                 it("should contain the left value", function () {
-                    expect(result.fold(identity, () => FailureStr)).toBe("Left")
+                    expect(result.fold(identity, () => FailureStr)).toBe("Left");
                 });
 
             });
@@ -858,14 +858,14 @@ describe('Either', function () {
 
                 let result: Either<string, string>;
 
-                beforeEach(() => result = Either.conditionally(true, () => "Left", () => "Right"))
+                beforeEach(() => result = Either.conditionally(true, () => "Left", () => "Right"));
 
                 it("should take the Right path", function () {
                     expect(result.isRight()).toBe(true);
                 });
 
                 it("should contain the left value", function () {
-                    expect(result.fold(() => FailureStr, identity)).toBe("Right")
+                    expect(result.fold(() => FailureStr, identity)).toBe("Right");
                 });
 
             });
@@ -876,18 +876,18 @@ describe('Either', function () {
 
             describe("When the passed lambda returns the right path", function () {
 
-                const ExpectedResult = "Hey there :)"
+                const ExpectedResult = "Hey there :)";
 
                 let result: Either<any, string>;
 
-                beforeEach(() => result = Either.catch(() => ExpectedResult))
+                beforeEach(() => result = Either.catch(() => ExpectedResult));
 
                 it("should return the right path", function () {
                     expect(result.isRight()).toBe(true);
                 });
 
                 it("should return the right value", function () {
-                    expect(result.orNull()).toBe(ExpectedResult)
+                    expect(result.orNull()).toBe(ExpectedResult);
                 });
 
             });
@@ -896,18 +896,18 @@ describe('Either', function () {
 
                 const ExpectedError = new Error("Something horrible has happened.");
 
-                let result: Either<any, string>
+                let result: Either<any, string>;
 
                 beforeEach(() => result = Either.catch(() => {
-                    throw ExpectedError
-                }))
+                    throw ExpectedError;
+                }));
 
                 it("should return the left path", function () {
                     expect(result.isLeft()).toBe(true);
                 });
 
                 it("should return the thrown error as the value", function () {
-                    expect(result.fold(identity, () => FailureStr)).toBe(ExpectedError)
+                    expect(result.fold(identity, () => FailureStr)).toBe(ExpectedError);
                 });
 
             });
@@ -917,36 +917,36 @@ describe('Either', function () {
                 // Yeah, you can throw whatever you want in javascript land ¯\_(ツ)_/¯ this is why the left type is `any`
                 const ExpectedError = "Something horrible has happened.";
 
-                let result: Either<any, string>
+                let result: Either<any, string>;
 
                 beforeEach(() => result = Either.catch(() => {
-                    throw ExpectedError
-                }))
+                    throw ExpectedError;
+                }));
 
                 it("should return the left path", function () {
                     expect(result.isLeft()).toBe(true);
                 });
 
                 it("should return the thrown error as the value", function () {
-                    expect(result.fold(identity, () => FailureStr)).toBe(ExpectedError)
+                    expect(result.fold(identity, () => FailureStr)).toBe(ExpectedError);
                 });
 
             });
 
-        })
+        });
 
         describe('catchAndFlatten', function () {
 
             describe('When on the Left path', function () {
 
                 const MockException = new Error("Uh Oh...");
-                const WrongException = new Error("Not this one!")
+                const WrongException = new Error("Not this one!");
 
                 let result: Either<any, string>;
 
                 beforeEach(() => result = Either.catchAndFlatten(() => {
-                    throw MockException
-                }))
+                    throw MockException;
+                }));
 
                 it("should return an Either", function () {
                     expect(result).toBeInstanceOf(Either);
@@ -957,18 +957,18 @@ describe('Either', function () {
                 });
 
                 it("should contain the thrown MockException as its value", function () {
-                    expect(result.fold(identity, () => WrongException)).toBe(MockException)
+                    expect(result.fold(identity, () => WrongException)).toBe(MockException);
                 });
 
             });
 
             describe('When on the Right path', function () {
 
-                const ExpectedStr = "Hello"
+                const ExpectedStr = "Hello";
 
                 let result: Either<any, string>;
 
-                beforeEach(() => result = Either.catchAndFlatten(() => Either.Right(ExpectedStr)))
+                beforeEach(() => result = Either.catchAndFlatten(() => Either.Right(ExpectedStr)));
 
                 it("should return an Either", function () {
                     expect(result).toBeInstanceOf(Either);
@@ -987,8 +987,10 @@ describe('Either', function () {
         });
 
         describe('lift', function () {
-            //todo(mikol)
-        })
+
+
+
+        });
 
     });
 

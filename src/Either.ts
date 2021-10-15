@@ -6,58 +6,66 @@ abstract class Either<A, B> {
     abstract _isRight: boolean
 
     isLeft() {
-        return this._isLeft
+        return this._isLeft;
     }
     isRight() {
-        return this._isRight
+        return this._isRight;
     }
 
     private static IllegalSideException(fnName: string) {
-        return new Error(`IllegalEitherException failed running '${fnName}', returned an Either that was not of type 'Left' or 'Right'`)
+        return new Error(`IllegalEitherException failed running '${fnName}', returned an Either that was not of type 'Left' or 'Right'`);
     }
 
     protected static _Left = class<A> extends Either<A, any> {
 
         constructor(value: A) {
             super();
-            this._value = value
+            this._value = value;
         }
 
-        _value: A
+        _value: A;
 
         _isRight = false;
         _isLeft = true;
 
         toString() {
-            return `Either.Left(${typeof this._value})`
+            return `Either.Left(${typeof this._value})`;
         }
 
-    }
+    };
 
     protected static _Right = class<B> extends Either<any, B> {
 
         constructor(value: B) {
             super();
-            this._value = value
+            this._value = value;
         }
 
-        _value: B
+        _value: B;
 
         _isRight = true;
         _isLeft = false;
 
         toString() {
-            return `Either.Right(${typeof this._value})`
+            return `Either.Right(${typeof this._value})`;
         }
 
-    }
+    };
 
     public static Right<C>(value: C) {
-        return new Either._Right(value)
+        return new Either._Right(value);
     }
 
     public static Left<C>(value: C) {
-        return new Either._Left(value)
+        return new Either._Left(value);
+    }
+
+    /**
+     *  Lifts a function `(B) -> C` to the [Either] structure returning a polymorphic function
+     *  that can be applied over all [Either] values in the shape of Either<A, B>
+     */
+    public static lift<A, B, C>(f: (rightArg: B) => C): (either: Either<A, B>) => Either<A, C> {
+
     }
 
     /**
@@ -75,14 +83,14 @@ abstract class Either<A, B> {
     public static conditionally<C,D>(test: boolean, ifFalse: () => C, ifTrue: () => D): Either<C, D> {
         return test
             ? Either.Right(ifTrue())
-            : Either.Left(ifFalse())
+            : Either.Left(ifFalse());
     }
 
     public static catch<B>(f:() => B): Either<any, B> {
         try {
-            return Either.Right(f())
+            return Either.Right(f());
         } catch (error: any) {
-           return Either.Left(error)
+           return Either.Left(error);
         }
     }
 
@@ -91,24 +99,24 @@ abstract class Either<A, B> {
             .catch(f)
             .fold((leftArg) => Either.Left(leftArg), (rightArg) => {
                 if(rightArg instanceof Either._Right) return rightArg;
-                throw Either.IllegalSideException("catchAndFlatten")
-            })
+                throw Either.IllegalSideException("catchAndFlatten");
+            });
     }
 
     public fold<C>(ifLeft: (leftArg : A) => C, ifRight: (rightArg: B) => C): C {
-        if(this instanceof Either._Right) return ifRight(this._value)
-        if(this instanceof Either._Left) return ifLeft(this._value)
+        if(this instanceof Either._Right) return ifRight(this._value);
+        if(this instanceof Either._Left) return ifLeft(this._value);
         throw Either.IllegalSideException('fold');
     }
 
     public foldLeft<C>(initial: C, rightOperation: (initialArg: C, rightArg: B) => C) {
-        if(this instanceof Either._Right) return rightOperation(initial, this._value)
-        if(this instanceof Either._Left) return initial
+        if(this instanceof Either._Right) return rightOperation(initial, this._value);
+        if(this instanceof Either._Left) return initial;
         throw Either.IllegalSideException('foldLeft');
     }
 
     public bifoldLeft<C>(initial: C, fa: (initialArg: C, leftArg: A) => C, fb: (initialArg: C, rightArg: B) => C) {
-        return this.fold((l) => fa(initial, l), (r) => fb(initial, r) )
+        return this.fold((l) => fa(initial, l), (r) => fb(initial, r) );
     }
 
     /**
@@ -137,7 +145,7 @@ abstract class Either<A, B> {
      */
     public map<C>(rPath: (rArg: C) => C): Either<A, C> {
         if (this instanceof Either._Left) return this;
-        if (this instanceof Either._Right) return new Either._Right(rPath(this._value))
+        if (this instanceof Either._Right) return new Either._Right(rPath(this._value));
         throw Either.IllegalSideException('map');
     }
 
@@ -162,9 +170,9 @@ abstract class Either<A, B> {
      * @param f The function to bind across {@link Either.Right}.
      */
     public flatMap<A, B, C> (f: (arg: B) => Either<A, C>): Either<A, C> {
-        if(this instanceof Either._Right) return f(this._value)
-        if(this instanceof Either._Left) return this
-        throw Either.IllegalSideException('flatMap')
+        if(this instanceof Either._Right) return f(this._value);
+        if(this instanceof Either._Left) return this;
+        throw Either.IllegalSideException('flatMap');
     }
 
     /**
@@ -174,9 +182,9 @@ abstract class Either<A, B> {
      * @param fb The function that will  be wrapped in {@link Either.Right} given the right path.
      */
     public bimap<C, D> (fa: (argA: A) => C, fb:  (argB:  B) => D): Either<C, D>  {
-        if(this instanceof Either._Right) return Either.Right(fb(this._value))
-        if(this instanceof Either._Left) return Either.Left(fa(this._value))
-        throw Either.IllegalSideException('bimap')
+        if(this instanceof Either._Right) return Either.Right(fb(this._value));
+        if(this instanceof Either._Left) return Either.Left(fa(this._value));
+        throw Either.IllegalSideException('bimap');
     }
 
     /**
@@ -193,11 +201,11 @@ abstract class Either<A, B> {
      */
     public tap(f:(arg: B) => any): Either<A, B> {
         if(this instanceof Either._Right) {
-            f(this._value)
+            f(this._value);
             return this;
         }
-        if(this instanceof Either._Left) return this
-        throw Either.IllegalSideException("tap")
+        if(this instanceof Either._Left) return this;
+        throw Either.IllegalSideException("tap");
     }
 
     /**
@@ -213,12 +221,12 @@ abstract class Either<A, B> {
      * ```
      */
     public tapLeft(f:(arg: A) => any): Either<A, B> {
-        if(this instanceof Either._Right) return this
+        if(this instanceof Either._Right) return this;
         if(this instanceof Either._Left) {
-            f(this._value)
+            f(this._value);
             return this;
         }
-        throw Either.IllegalSideException("tapLeft")
+        throw Either.IllegalSideException("tapLeft");
     }
 
     /**
@@ -245,7 +253,7 @@ abstract class Either<A, B> {
      * ```
      */
     public getOrHandle(f: (leftValue: A) => B): B {
-        return this.fold(f, identity)
+        return this.fold(f, identity);
     }
 
     /**
@@ -289,8 +297,8 @@ abstract class Either<A, B> {
      */
     public exists(predicate: (rightValue: B) => boolean): boolean {
         if(this instanceof Either._Left) return false;
-        if(this instanceof Either._Right) return predicate(this._value)
-        throw Either.IllegalSideException('exists')
+        if(this instanceof Either._Right) return predicate(this._value);
+        throw Either.IllegalSideException('exists');
     }
 
     /**
@@ -308,8 +316,8 @@ abstract class Either<A, B> {
      */
     public all(predicate: (rightValue: B) => boolean): boolean {
         if(this instanceof Either._Left) return true;
-        if(this instanceof Either._Right) return predicate(this._value)
-        throw Either.IllegalSideException('all')
+        if(this instanceof Either._Right) return predicate(this._value);
+        throw Either.IllegalSideException('all');
     }
 
     /**
@@ -339,13 +347,13 @@ abstract class Either<A, B> {
     }
 
     public traverse<C>(fa: (rightArg: B) => Array<C>): Array<Either<A, C>> {
-        return this.fold(() => [], (rightArg) => fa(rightArg).map((it) => Either.Right(it)))
+        return this.fold(() => [], (rightArg) => fa(rightArg).map((it) => Either.Right(it)));
     }
 
     public traverseNullable<C>(fa: (rightArg: B) => Array<C>): Array<Either<A, C>> | null {
         if(this instanceof Either._Left) return null;
         if(this instanceof Either._Right) return fa(this._value).map((it) => Either.Right(it));
-        throw Either.IllegalSideException('traverseNullable')
+        throw Either.IllegalSideException('traverseNullable');
     }
 
 }

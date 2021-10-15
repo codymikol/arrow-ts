@@ -1,13 +1,13 @@
-import {Either} from "../Either";
-import {identity} from "../Identity";
+import {Either} from "../Either"
+import {identity} from "../Identity"
 
 class ComputeException<A> extends Error {
 
-    value: A;
+    value: A
 
     constructor(leftArg: A) {
         super("")
-        this.value = leftArg;
+        this.value = leftArg
     }
 
 }
@@ -40,7 +40,7 @@ class either {
 
             const computeContext = new ComputeContext<B>()
 
-            const isComputeError = (candidate: any): candidate is ComputeException<A> => true;
+            const isComputeError = (candidate: any): candidate is ComputeException<A> => true
 
             try {
                 return Either.Right(computeFunction(computeContext))
@@ -48,7 +48,7 @@ class either {
                 if (isComputeError(candidate)) {
                     return Either.Left(candidate.value)
                 } else {
-                    throw candidate;
+                    throw candidate
                 }
             }
         }
