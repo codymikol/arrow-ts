@@ -2,7 +2,7 @@
   "name": "arrow-ts",
   "version": "0.0.2",
   "description": "A functional companion to typescript",
-  "main": "index.js",
+  "main": "src/index.ts",
   "scripts": {
     "test": "jasmine-ts \"./spec/**/*.spec.ts\"",
     "lint": "yarn eslint . --ext .ts --fix"
