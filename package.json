@@ -1,6 +1,6 @@
 {
   "name": "arrow-ts",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A functional companion to typescript",
   "main": "index.js",
   "scripts": {
