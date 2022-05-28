@@ -1,5 +1,5 @@
 function identity<C>(a: C): C {
-    return a
+    return a;
 }
 
-export { identity }
+export { identity };
