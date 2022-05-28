@@ -16,7 +16,7 @@ abstract class Either<A, B> {
         return new Error(`IllegalEitherException failed running '${fnName}', returned an Either that was not of type 'Left' or 'Right'`);
     }
 
-    protected static _Left = class<A> extends Either<A, any> {
+    private static _Left = class<A> extends Either<A, any> {
 
         constructor(value: A) {
             super();
@@ -34,7 +34,7 @@ abstract class Either<A, B> {
 
     };
 
-    protected static _Right = class<B> extends Either<any, B> {
+    private static _Right = class<B> extends Either<any, B> {
 
         constructor(value: B) {
             super();
