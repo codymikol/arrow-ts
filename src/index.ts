@@ -1,1 +1,2 @@
-export * from "./Either";
+export * from './computations/either'
+export * from './Either'
