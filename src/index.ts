@@ -1,2 +1,2 @@
-export * from './computations/either'
-export * from './Either'
+export { either } from './computations/either';
+export { Either } from './Either';
