@@ -60,13 +60,14 @@ abstract class Either<A, B> {
         return new Either._Left(value);
     }
 
-    /**
-     *  Lifts a function `(B) -> C` to the [Either] structure returning a polymorphic function
-     *  that can be applied over all [Either] values in the shape of Either<A, B>
-     */
-    public static lift<A, B, C>(f: (rightArg: B) => C): (either: Either<A, B>) => Either<A, C> {
-
-    }
+    //  todo(mikol): I meant to add this, but never finished, clean this up...
+    // /**
+    //  *  Lifts a function `(B) -> C` to the [Either] structure returning a polymorphic function
+    //  *  that can be applied over all [Either] values in the shape of Either<A, B>
+    //  */
+    // public static lift<A, B, C>(f: (rightArg: B) => C): (either: Either<A, B>) => Either<A, C> {
+    //
+    // }
 
     /**
      * Will create an {@link Either} from the result of evaluating the first parameter using the functions

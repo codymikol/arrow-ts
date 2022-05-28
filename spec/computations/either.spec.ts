@@ -76,6 +76,41 @@ describe('computations', function () {
 
             })
 
+            describe('When bound values have different types', function () {
+
+                const MockError = new Error("The soup exploded into a billion tiny droplets!")
+
+                const getVeggieType = () => Either.Right("bean")
+                const getVeggieCount = () => Either.Right(3)
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
+                // noinspection DuplicatedCode
+                const getSoup = either.eager<Error, string>(({bind}) => {
+                    const veggieType = bind(getVeggieType())
+                    const veggieCount = bind(getVeggieCount())
+                    return `We have ${veggieCount} ${veggieType}s!`
+                })
+
+                let result: Either<Error, string>
+
+                beforeEach(function () {
+                    result = getSoup()
+                })
+
+                it("should return an Either", function () {
+                    expect(result).toBeInstanceOf(Either)
+                })
+
+                it('should return the right path', function () {
+                    expect(result.isRight()).toBe(true)
+                })
+
+                it('should contain the correct value', function () {
+                    expect(result.orNull()).toBe("We have 3 beans!")
+                })
+
+            });
+
         })
 
     })
