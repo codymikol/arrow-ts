@@ -25,7 +25,9 @@ class ComputeContext<L> {
      * @param either - an {@link Either} that must have the same signature as its parent {@link ComputeFunctions}
      */
     bind<C>(either: Either<L, C>): C {
-        return either.fold(leftArg => { throw new ComputeException(leftArg); }, identity);
+        return either.fold(leftArg => {
+            throw new ComputeException(leftArg);
+        }, identity);
     }
 
 }
@@ -34,25 +36,16 @@ type ComputeFunctions<L, R> = { (computeContext: ComputeContext<L>): R; };
 
 class either {
 
+    private static isComputeError<L>(candidate: any): candidate is ComputeException<L> {
+        return true
+    }
+
     static eager<L, R>(computeFunctions: ComputeFunctions<L, R>): () => Either<L, R> {
-
-        return function ComputeFunction() {
-
-            const computeContext = new ComputeContext<L>();
-
-            const isComputeError = (candidate: any): candidate is ComputeException<L> => true;
-
-            try {
-                return Either.Right(computeFunctions(computeContext));
-            } catch (candidate) {
-                if (isComputeError(candidate)) {
-                    return Either.Left(candidate.value);
-                } else {
-                    throw candidate;
-                }
-            }
-        };
-
+        return () => Either
+            .catch(() => computeFunctions(new ComputeContext<L>()))
+            .mapLeft((candidate: L): L => {
+                if (either.isComputeError(candidate)) return candidate.value as L; else throw candidate
+            })
     }
 
 }
