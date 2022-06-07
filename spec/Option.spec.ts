@@ -1,3 +1,5 @@
+import {Option} from "../src/Option";
+
 describe('Option', function () {
 
     describe('Member Functions', function () {
@@ -274,12 +276,40 @@ describe('Option', function () {
 
     describe('Static Functions', function () {
 
-        describe('unit', function () {
+        describe('Some', () => {
 
-        });
+            const result = Option.Some("Foo")
+
+            it('should not be "empty"', () => {
+                expect(result.isEmpty()).toBe(false)
+            })
+
+            it('should correctly format toString', () => {
+                expect(result.toString()).toBe("Some(string)")
+            })
+
+        })
+
+        describe('None', () => {
+
+            const result = Option.None()
+
+            it('should be "empty"', () => {
+                expect(result.isEmpty()).toBe(true)
+            })
+
+            it('should correctly format toString', () => {
+                expect(result.toString()).toBe("None()")
+            })
+
+        })
 
         describe('fromNullable', function () {
             //todo(mikol)
+        });
+
+        describe('unit', function () {
+
         });
 
         describe('invoke', function () {
