@@ -25,7 +25,7 @@ abstract class Option<T> {
 
     private static _Some = class<T> extends Option<T> {
 
-        constructor(value: NonNullable<T>) {
+        constructor(value: T) {
             super();
             this._value = value;
         }
@@ -44,13 +44,13 @@ abstract class Option<T> {
         return new Option._None()
     }
 
-    public static Some<T>(value: NonNullable<T>) {
+    public static Some<T>(value: T) {
         return new Option._Some(value)
     }
 
     public static fromNullable<T>(value: T): Option<T> {
         return (value !== null && value !== undefined)
-            ? new Option._Some(value!)
+            ? new Option._Some(value)
             : new Option._None()
     }
 

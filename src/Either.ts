@@ -1,4 +1,5 @@
 import { identity } from "./Identity";
+import {Option} from "./Option";
 
 abstract class Either<A, B> {
 
@@ -268,6 +269,13 @@ abstract class Either<A, B> {
      */
     public orNull(): B | null {
         return this.fold(() => null, identity);
+    }
+
+    public orNone(): Option<B> {
+        return this.fold(
+            () => Option.None() as Option<B>,
+            (value) => Option.Some(value) as Option<B>
+        )
     }
 
     public findOrNull(predicate: (rightArg: B) => boolean): B | null {

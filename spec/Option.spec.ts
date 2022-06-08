@@ -352,15 +352,35 @@ describe('Option', function () {
 
         describe('Some', () => {
 
-            const result = Option.Some("Foo")
+            describe("Using a non-null value", () => {
 
-            it('should not be "empty"', () => {
-                expect(result.isEmpty()).toBe(false)
+                const result = Option.Some("Foo")
+
+                it('should not be "empty"', () => {
+                    expect(result.isEmpty()).toBe(false)
+                })
+
+                it('should correctly format toString', () => {
+                    expect(result.toString()).toBe("Some(string)")
+                })
+
             })
 
-            it('should correctly format toString', () => {
-                expect(result.toString()).toBe("Some(string)")
+            describe("Explicitly using a null value", () => {
+
+                const result = Option.Some(null)
+
+                it('should not be "empty"', () => {
+                    expect(result.isEmpty()).toBe(false)
+                })
+
+                it('should correctly format toString', () => {
+                    //todo(mikol): Handle better toString for primitive values?
+                    expect(result.toString()).toBe("Some(object)")
+                })
+
             })
+
 
         })
 
