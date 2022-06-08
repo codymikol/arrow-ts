@@ -87,11 +87,51 @@ describe('Option', function () {
         });
 
         describe('isEmpty', function () {
-            //todo(mikol)
+
+            describe("When used on a Some", () => {
+
+                const result = Option.Some("Foo").isEmpty()
+
+                it("should return the correct result", () => {
+                    expect(result).toBe(false)
+                })
+
+            })
+
+            describe("When used on a None", () => {
+
+                const result = Option.None().isEmpty()
+
+                it("should return the correct result", () => {
+                    expect(result).toBe(true)
+                })
+
+            })
+
         });
 
         describe('isNotEmpty', function () {
-            //todo(mikol)
+
+            describe("When used on a Some", () => {
+
+                const result = Option.Some("Foo").isNotEmpty()
+
+                it("should return the correct result", () => {
+                    expect(result).toBe(true)
+                })
+
+            })
+
+            describe("When used on a None", () => {
+
+                const result = Option.None().isNotEmpty()
+
+                it("should return the correct result", () => {
+                    expect(result).toBe(false)
+                })
+
+            })
+
         });
 
         describe('nonEmpty', function () {
@@ -423,11 +463,11 @@ describe('Option', function () {
         });
 
         describe('unit', function () {
-
+            // Not sure if it makes sense to implement this
         });
 
         describe('invoke', function () {
-            //todo(mikol)
+            // Cannot implement this due to language limitations, new Option("Foo") will not be possible.
         });
 
         describe('catch', function () {
