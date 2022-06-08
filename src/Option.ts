@@ -2,8 +2,32 @@ abstract class Option<T> {
 
     abstract _isEmpty: boolean
 
-    isEmpty() {
+    /**
+     * Will return false when an {@link Option.Some}
+     * Will return true when an {@link Option.None}
+     *
+     * Example:
+     * ```
+     * Some("foo").isEmpty() // Result: returns: false
+     * None().isEmpty() // Result: returns: true
+     * ```
+     */
+    public isEmpty() {
         return this._isEmpty;
+    }
+
+    /**
+     * Will return true when an {@link Option.Some}
+     * Will return false when an {@link Option.None}
+     *
+     * Example:
+     * ```
+     * Some("foo").isNotEmpty() // Result: returns: true
+     * None().isNotEmpty() // Result: returns: false
+     * ```
+     */
+    public isNotEmpty() {
+        return !this.isEmpty()
     }
 
     private static _None = class<T> extends Option<T> {
