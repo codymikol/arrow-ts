@@ -58,7 +58,7 @@ abstract class Option<T> {
      * The given function is applied as a fire and forget effect
      * if this is a {@link Option.Some}.
      * When applied the result is ignored and the original
-     * Either value is returned
+     * Option value is returned
      *
      * Example:
      * ```
@@ -75,7 +75,7 @@ abstract class Option<T> {
      * The given function is applied as a fire and forget effect
      * if this is a {@link Option.None}.
      * When applied the result is ignored and the original
-     * Either value is returned
+     * Option value is returned
      *
      * Example:
      * ```
