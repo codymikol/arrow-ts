@@ -4,12 +4,86 @@ describe('Option', function () {
 
     describe('Member Functions', function () {
 
-        describe('tapNone', function () {
-            //todo(mikol)
+        describe('tap', function () {
+
+            describe("using tap on a Some", () => {
+
+                const option = Option.Some("Foo")
+
+                it("should call the tap lambda", () => {
+
+                    var wasTapped = false
+
+                    option.tap(() => wasTapped = true)
+
+                    expect(wasTapped).toBe(true)
+
+                })
+
+                it("should give you access to the value of the Some", () => {
+
+                    let tapped = ""
+
+                    option.tap((value) => tapped = value)
+
+                    expect(tapped).toBe("Foo")
+
+                })
+
+            })
+
+            describe("using tap on a None", () => {
+
+                const option = Option.None()
+
+                it("should NOT call the tap lambda", () => {
+
+                    var wasTapped = false
+
+                    option.tap(() => wasTapped = true)
+
+                    expect(wasTapped).toBe(false)
+
+                })
+
+            })
+
         });
 
-        describe('tap', function () {
-            //todo(mikol)
+        describe('tapNone', function () {
+
+            describe("using tapNone on a Some", () => {
+
+                const option = Option.Some("Foo")
+
+                it("should NOT call the tapNone lambda", () => {
+
+                    var wasTapped = false
+
+                    option.tapNone(() => wasTapped = true)
+
+                    expect(wasTapped).toBe(false)
+
+                })
+
+            })
+
+            describe("using tapNone on a None", () => {
+
+                const option = Option.None()
+
+                it("should call the tapNone lambda", () => {
+
+                    var wasTapped = false
+
+                    option.tapNone(() => wasTapped = true)
+
+                    expect(wasTapped).toBe(true)
+
+                })
+
+            })
+
         });
 
         describe('isEmpty', function () {
