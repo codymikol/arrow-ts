@@ -1,5 +1,6 @@
 import {Either} from "../src";
 import {identity} from "../src/Identity";
+import {Option} from "../src/Option";
 
 describe('Either', function () {
 
@@ -426,7 +427,35 @@ describe('Either', function () {
         });
 
         describe('orNone', function () {
-            //todo(mikol) requires an Optional<T> implementation...
+
+            describe("When on the Left path", () => {
+
+                const either = Either.Left("Foo")
+
+                const result = either.orNone()
+
+                it("should return an empty Option", () => {
+                    expect(result.isEmpty()).toBe(true)
+                })
+
+            })
+
+            describe("When on the Right path", () => {
+
+                const either = Either.Right("Foo")
+
+                const result = either.orNone()
+
+                it("should return an Option", () => {
+                    expect(result).toBeInstanceOf(Option)
+                })
+
+                it("should not be empty", () => {
+                    expect(result.isEmpty()).toBe(false)
+                })
+
+            })
+
         });
 
         describe('replicate', function () {
