@@ -49,7 +49,43 @@ abstract class Option<T> {
     }
 
     public static fromNullable<T>(value: T): Option<T> {
-        return (value === null || value === undefined) ? this.None() : this.Some(value as unknown as NonNullable<T>)
+        return (value !== null && value !== undefined)
+            ? new Option._Some(value!)
+            : new Option._None()
+    }
+
+    /**
+     * The given function is applied as a fire and forget effect
+     * if this is a {@link Option.Some}.
+     * When applied the result is ignored and the original
+     * Either value is returned
+     *
+     * Example:
+     * ```
+     * Some("foo").tap(() => println("flower")) // Result: prints "flower" and returns: Some("foo")
+     * None().tap(() => println("flower"))  // Result: prints nothing and returns: None()
+     * ```
+     */
+    public tap(f:(arg: T) => any): Option<T> {
+        if(this instanceof Option._Some) f(this._value)
+        return this
+    }
+
+    /**
+     * The given function is applied as a fire and forget effect
+     * if this is a {@link Option.None}.
+     * When applied the result is ignored and the original
+     * Either value is returned
+     *
+     * Example:
+     * ```
+     * None().tapNone(() => println("flower")) // Result: prints "flower" and returns None()
+     * Some("foo").tapNone(() => println("flower"))  // Result: prints nothing and returns Some("foo")
+     * ```
+     */
+    public tapNone(f:() => any): Option<T> {
+        if(this instanceof Option._None) f()
+        return this
     }
 
 }
