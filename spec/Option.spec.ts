@@ -305,7 +305,27 @@ describe('Option', function () {
         })
 
         describe('fromNullable', function () {
-            //todo(mikol)
+
+            describe("when the passed value is null", () => {
+
+                const result = Option.fromNullable(null)
+
+                it('should be empty', () => {
+                    expect(result.isEmpty()).toBe(true)
+                })
+
+            })
+
+            describe('when the passed value is not null', () => {
+
+                const result = Option.fromNullable("Cody")
+
+                it('should not be empty', () => {
+                    expect(result.isEmpty()).toBe(false)
+                })
+
+            })
+
         });
 
         describe('unit', function () {
