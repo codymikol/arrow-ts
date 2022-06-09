@@ -78,6 +78,11 @@ abstract class Option<T> {
             : new Option._None()
     }
 
+    public fold<C>(lFn:() => C, rFn: (arg: T) => C): C {
+        if(this instanceof Option._Some) return rFn(this._value)
+        return lFn()
+    }
+
     /**
      * The given function is applied as a fire and forget effect
      * if this is a {@link Option.Some}.
