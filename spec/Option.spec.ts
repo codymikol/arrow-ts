@@ -135,11 +135,13 @@ describe('Option', function () {
         });
 
         describe('nonEmpty', function () {
-            //todo(mikol)
+            // I've decided against adding this since it duplicates isNotEmpty()
+            // and its counterpart has the issues mentioned below
         });
 
         describe('isDefined', function () {
-            //todo(mikol)
+            // I've decided against adding this as it duplicates isNotEmpty, and
+            // it seems to imply some involvement of "undefined" in typescript
         });
 
         describe('orNull', function () {
@@ -151,7 +153,67 @@ describe('Option', function () {
         });
 
         describe('fold', function () {
-            //todo(mikol)
+
+            describe("When used on a None", () => {
+
+                let leftLambdaCalled = false;
+                let rightLambdaCalled = false;
+
+                const result = Option.None().fold(
+                        () => {
+                            leftLambdaCalled = true;
+                            return "left"
+                        },
+                        (value) => {
+                            rightLambdaCalled = true;
+                            return value + "bar"
+                        }
+                )
+
+                it("should call the first (Left) lambda", () => {
+                    expect(leftLambdaCalled).toBe(true)
+                })
+
+                it("should NOT call the second (Right) lambda", () => {
+                    expect(rightLambdaCalled).toBe(false)
+                })
+
+                it("should return the result of the first (Left) lambda", () => {
+                    expect(result).toBe("left")
+                })
+
+            })
+
+            describe("When used on a Some", () => {
+
+                let leftLambdaCalled = false;
+                let rightLambdaCalled = false;
+
+                const result = Option.Some("Foo").fold(
+                    () => {
+                        leftLambdaCalled = true;
+                        return "left"
+                    },
+                    (value) => {
+                        rightLambdaCalled = true;
+                        return value + "bar"
+                    }
+                )
+
+                it("should NOT call the first (Left) lambda", () => {
+                    expect(leftLambdaCalled).toBe(false)
+                })
+
+                it("should call the second (Right) lambda", () => {
+                    expect(rightLambdaCalled).toBe(true)
+                })
+
+                it("should return the result of the second (Right) lambda", () => {
+                    expect(result).toBe("Foobar")
+                })
+
+            })
+
         });
 
         describe('mapNotNull', function () {
