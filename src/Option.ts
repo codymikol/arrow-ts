@@ -87,6 +87,15 @@ abstract class Option<T> {
     }
 
     /**
+     * if this is an {@link Option.Some}, this will return the result of f
+     * if this is an {@link Option.None}, this will return true
+     * @param f
+     */
+    public all(f:(val: T) => Boolean): Boolean {
+        return this.fold(() => true, (val) => f(val))
+    }
+
+    /**
      * if this is an {@link Option.Some}, this will return the options value
      * if this is an {@link Option.None}, this will return null
      *
