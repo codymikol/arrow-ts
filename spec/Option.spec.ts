@@ -368,7 +368,56 @@ describe('Option', function () {
         });
 
         describe('all', function () {
-            //todo(mikol)
+
+            describe("When used on a Some", () => {
+
+                describe("When the predicate returns true", () => {
+
+                    const result = Option.Some("Foo").all((val) => val === "Foo")
+
+                    it("Should return the correct Boolean result", () => {
+                        expect(result).toBe(true)
+                    })
+
+                })
+
+                describe("When the predicate returns false", () => {
+
+                    const result = Option.Some("Foo").all((val) => val === "Bar")
+
+                    it("Should return the correct Boolean result", () => {
+                        expect(result).toBe(false)
+                    })
+
+                })
+
+
+            })
+
+            describe("When used on a None", () => {
+
+                describe("When the predicate returns true", () => {
+                    const option: Option<string> = Option.None()
+                    const result = option.all((val) => true)
+
+                    it("Should return the correct Boolean result", () => {
+                        expect(result).toBe(true)
+                    })
+
+                })
+
+                describe("When the predicate returns false", () => {
+                    const option: Option<string> = Option.None()
+                    const result = option.all((val) => false)
+
+                    it("Should return the correct Boolean result", () => {
+                        expect(result).toBe(true)
+                    })
+
+                })
+
+            })
+
         });
 
         describe('crosswalk', function () {
