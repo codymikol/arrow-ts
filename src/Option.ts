@@ -1,6 +1,12 @@
 abstract class Option<T> {
 
+    private constructor() {}
+
     abstract _isEmpty: boolean
+
+    private static IllegalOptionException(fnName: string) {
+        return new Error(`IllegalEitherException failed running '${fnName}', returned an Option that was neither Some or None`);
+    }
 
     /**
      * Will return false when an {@link Option.Some}
@@ -30,14 +36,11 @@ abstract class Option<T> {
         return !this.isEmpty()
     }
 
-    private static _None = class<T> extends Option<T> {
+    private static _None = class extends Option<any> {
 
         constructor() {
             super();
-            this._value = null;
         }
-
-        _value: null
 
         _isEmpty = true
 
@@ -64,7 +67,7 @@ abstract class Option<T> {
 
     }
 
-    public static None<T>() {
+    public static None() {
         return new Option._None()
     }
 
@@ -81,6 +84,51 @@ abstract class Option<T> {
     public fold<C>(lFn:() => C, rFn: (arg: T) => C): C {
         if(this instanceof Option._Some) return rFn(this._value)
         return lFn()
+    }
+
+    /**
+     * if this is an {@link Option.Some}, this will return the options value
+     * if this is an {@link Option.None}, this will return null
+     *
+     * Example:
+     * ```
+     *  Some("foo").orNull()// Result: returns "foo"
+     *  None().orNull()//Result: returns: null
+     */
+    public orNull(): T | null {
+       return this.fold(() => null, (val) => val)
+    }
+
+    /**
+     * if this is an {@link Option.Some}, this will return an {@link Option} that
+     * is the result of the f lambda expression
+     * if this is an {@link Option.None}, this will return an {@link Option.None}
+     *
+     * Example:
+     * ```
+     * Some("foo").flatMap((val) => Option.Some(val.length))// Result: returns: Some(3)
+     * None().flatMap((val) => Option.Some("Foo"))// Result: returns: None()
+     * ```
+     */
+    public flatMap<C>(f:(val: T) => Option<C>): Option<C> {
+        if(this instanceof  Option._None) return this as unknown as Option<C>
+        if(this instanceof Option._Some) return f(this._value)
+        throw Option.IllegalOptionException("flatMap")
+    }
+
+    /**
+     * if this is an {@link Option.Some}, this will return an {@link Option.Some}
+     * with the result of applying f to this {@link Option}'s value
+     * if this is an {@link Option.None}, this will return an {@link Option.None}
+     *
+     * Example:
+     * ```
+     * Some("foo").map((val) => val.length)// Result: returns: Some(3)
+     * None().map((val) => "Foo")// Result: returns: None()
+     * ```
+     */
+    public map<C>(f:(val: T) => C): Option<C> {
+        return this.flatMap((a: T) => new Option._Some(f(a)))
     }
 
     /**

@@ -145,11 +145,73 @@ describe('Option', function () {
         });
 
         describe('orNull', function () {
-            //todo(mikol)
+
+            describe("When used on a None", () => {
+
+                const result = Option.None().orNull()
+
+                it("should return null", () => {
+                    expect(result).toBe(null)
+                })
+
+            })
+
+            describe("When used on a Some", () => {
+
+                const result = Option.Some("Foo").orNull()
+
+                it("should return 'Foo'", () => {
+                    expect(result).toBe('Foo')
+                })
+
+            })
+
         });
 
         describe('map', function () {
-            //todo(mikol)
+
+            describe("When used on a None", () => {
+
+                let mapLambdaCalled = false;
+
+                const result: Option<string> = Option.None().map((x) => {
+                    mapLambdaCalled = true;
+                    return x + "bar"
+                })
+
+                it("should remain an empty Option", () => {
+                    expect(result.isEmpty()).toBe(true)
+                })
+
+                it("should NOT call the map lambda", () => {
+                    expect(mapLambdaCalled).toBe(false)
+                })
+
+            })
+
+            describe("When used on a Some", () => {
+
+                let mapLambdaCalled = false;
+
+                const result = Option.Some("Foo").map((x) => {
+                    mapLambdaCalled = true;
+                    return x.length
+                })
+
+                it("should not be empty", () => {
+                    expect(result.isEmpty()).toBe(false)
+                })
+
+                it("should call the map lambda", () => {
+                    expect(mapLambdaCalled).toBe(true)
+                })
+
+                it("should be an Option<number> with the return value of the lambda", () => {
+                    expect(result.orNull()).toBe(3)
+                })
+
+            })
+
         });
 
         describe('fold', function () {
@@ -225,7 +287,76 @@ describe('Option', function () {
         });
 
         describe('flatMap', function () {
-            //todo(mikol)
+
+            describe("When used on a Some", () => {
+
+
+                const option = Option.Some("Foo")
+
+                describe("When the lambda returns a Some", () => {
+
+                    const result = option.flatMap(() => Option.Some(1))
+
+                    it("should NOT be empty", () => {
+                        expect(result.isNotEmpty()).toBe(true)
+                    })
+
+                    it("should contain the value of the returned Option in the lambda", () => {
+                        expect(result.orNull()).toBe(1)
+                    })
+
+                })
+
+                describe("When the lambda returns a None", () => {
+
+                    const result = option.flatMap(() => Option.None())
+
+                    it("should be empty", () => {
+                        expect(result.isEmpty()).toBe(true)
+                    })
+
+                    it("should contain no value", () => {
+                        expect(result.orNull()).toBe(null)
+                    })
+
+                })
+
+            })
+
+            describe("When used on a None", () => {
+
+                const option = Option.None()
+
+                describe("When the lambda returns a Some", () => {
+
+                    const result = option.flatMap(() => Option.Some("Foo"))
+
+                    it("should be empty", () => {
+                        expect(result.isEmpty()).toBe(true)
+                    })
+
+                    it("should contain no value", () => {
+                        expect(result.orNull()).toBe(null)
+                    })
+
+                })
+
+                describe("When the lambda returns a None", () => {
+
+                    const result = option.flatMap(() => Option.None())
+
+                    it("should be empty", () => {
+                        expect(result.isEmpty()).toBe(true)
+                    })
+
+                    it("should contain no value", () => {
+                        expect(result.orNull()).toBe(null)
+                    })
+
+                })
+
+            })
+
         });
 
         describe('align', function () {
