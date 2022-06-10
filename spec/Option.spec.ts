@@ -282,10 +282,6 @@ describe('Option', function () {
             //todo(mikol)
         });
 
-        describe('', function () {
-            //todo(mikol)
-        });
-
         describe('flatMap', function () {
 
             describe("When used on a Some", () => {
@@ -433,11 +429,124 @@ describe('Option', function () {
         });
 
         describe('filter', function () {
-            //todo(mikol)
+
+            describe("When used on a Some", () => {
+
+                const option = Option.Some("Foo")
+
+                describe("When the predicate returns true", () => {
+
+                    const result = option.filter(() => true)
+
+                    it("should return a Some", () => {
+                        expect(result.isNotEmpty()).toBe(true)
+                    })
+
+                    it("should retain the same value", () => {
+                        expect(result.orNull()).toBe("Foo")
+                    })
+
+                })
+
+                describe("When the predicate returns true", () => {
+
+                    const result = option.filter(() => false)
+
+                    it("should become a None", () => {
+                        expect(result.isEmpty()).toBe(true)
+                    })
+
+                })
+
+            })
+
+            describe("When used on a None", () => {
+
+                const option = Option.None()
+
+                describe("When the predicate returns true", () => {
+
+                    const result = option.filter(() => true)
+
+                    it("should return a None", () => {
+                        expect(result.isEmpty()).toBe(true)
+                    })
+
+                })
+
+                describe("When the predicate returns false", () => {
+
+                    const result = option.filter(() => false)
+
+                    it("should return a None", () => {
+                        expect(result.isEmpty()).toBe(true)
+                    })
+
+                })
+
+            })
+
         });
 
         describe('filterNot', function () {
-            //todo(mikol)
+
+            describe("When used on a Some", () => {
+
+                const option = Option.Some("Foo")
+
+                describe("When the predicate returns true", () => {
+
+                    const result = option.filterNot(() => true)
+
+                    it("should return a None", () => {
+                        expect(result.isEmpty()).toBe(true)
+                    })
+
+                })
+
+                describe("When the predicate returns false", () => {
+
+                    const result = option.filterNot(() => false)
+
+                    it("should return a Some", () => {
+                        expect(result.isNotEmpty()).toBe(true)
+                    })
+
+                    it("should retain the same value", () => {
+                        expect(result.orNull()).toBe("Foo")
+                    })
+
+                })
+
+            })
+
+            describe("When used on a None", () => {
+
+                const option = Option.None()
+
+                describe("When the predicate returns true", () => {
+
+                    const result = option.filterNot(() => true)
+
+                    it("should return a None", () => {
+                        expect(result.isEmpty()).toBe(true)
+                    })
+
+                })
+
+                describe("When the predicate returns false", () => {
+
+                    const result = option.filterNot(() => false)
+
+                    it("should return a None", () => {
+                        expect(result.isEmpty()).toBe(true)
+                    })
+
+                })
+
+            })
+
+
         });
 
         describe('exists', function () {

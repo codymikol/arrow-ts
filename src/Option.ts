@@ -8,34 +8,6 @@ abstract class Option<T> {
         return new Error(`IllegalEitherException failed running '${fnName}', returned an Option that was neither Some or None`);
     }
 
-    /**
-     * Will return false when an {@link Option.Some}
-     * Will return true when an {@link Option.None}
-     *
-     * Example:
-     * ```
-     * Some("foo").isEmpty() // Result: returns: false
-     * None().isEmpty() // Result: returns: true
-     * ```
-     */
-    public isEmpty() {
-        return this._isEmpty;
-    }
-
-    /**
-     * Will return true when an {@link Option.Some}
-     * Will return false when an {@link Option.None}
-     *
-     * Example:
-     * ```
-     * Some("foo").isNotEmpty() // Result: returns: true
-     * None().isNotEmpty() // Result: returns: false
-     * ```
-     */
-    public isNotEmpty() {
-        return !this.isEmpty()
-    }
-
     private static _None = class extends Option<any> {
 
         constructor() {
@@ -79,6 +51,34 @@ abstract class Option<T> {
         return (value !== null && value !== undefined)
             ? new Option._Some(value)
             : new Option._None()
+    }
+
+    /**
+     * Will return false when an {@link Option.Some}
+     * Will return true when an {@link Option.None}
+     *
+     * Example:
+     * ```
+     * Some("foo").isEmpty() // Result: returns: false
+     * None().isEmpty() // Result: returns: true
+     * ```
+     */
+    public isEmpty() {
+        return this._isEmpty;
+    }
+
+    /**
+     * Will return true when an {@link Option.Some}
+     * Will return false when an {@link Option.None}
+     *
+     * Example:
+     * ```
+     * Some("foo").isNotEmpty() // Result: returns: true
+     * None().isNotEmpty() // Result: returns: false
+     * ```
+     */
+    public isNotEmpty() {
+        return !this.isEmpty()
     }
 
     public fold<C>(lFn:() => C, rFn: (arg: T) => C): C {
@@ -172,6 +172,40 @@ abstract class Option<T> {
     public tapNone(f:() => any): Option<T> {
         if(this instanceof Option._None) f()
         return this
+    }
+
+    /**
+     * if this is an {@link Option.Some}, this will return an {@link Option.Some}
+     * when the predicate is true and {@link Option.None} when false
+     * if this is an {@link Option.None}, this will return an {@link Option.None}
+     *
+     * Example:
+     * ```
+     * Some("foo").filter((val) => true)// Result: returns: Some("foo")
+     * Some("foo").filter((val) => false)// Result: returns: None()
+     * None().filter((val) => true)// Result: returns: None()
+     * None().filter((val) => false)// Result: returns: None()
+     * ```
+     */
+    public filter(predicate: (option: T) => Boolean): Option<T> {
+        return this.flatMap((a) => predicate(a) ? Option.Some(a) : Option.None())
+    }
+
+    /**
+     * if this is an {@link Option.Some}, this will return an {@link Option.Some}
+     * when the predicate is false and {@link Option.None} when true
+     * if this is an {@link Option.None}, this will return an {@link Option.None}
+     *
+     * Example:
+     * ```
+     * Some("foo").filter((val) => true)// Result: returns: None()
+     * Some("foo").filter((val) => false)// Result: returns: Some("foo")
+     * None().filter((val) => true)// Result: returns: None()
+     * None().filter((val) => false)// Result: returns: None()
+     * ```
+     */
+    public filterNot(predicate: (option: T) => Boolean): Option<T> {
+        return this.flatMap((a) => !predicate(a) ? Option.Some(a) : Option.None())
     }
 
 }
